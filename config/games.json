@@ -60,6 +60,11 @@
     "title": "Big Red Button"
   },
   {
+    "link": "projects/bitlife/index.html",
+    "imgSrc": "projects/bitlife/logobit.png",
+    "title": "BitLife"
+  },
+  {
     "link": "projects/blackknight/index.html",
     "imgSrc": "projects/blackknight/blackknight.png",
     "title": "Black Knight"
