@@ -215,6 +215,11 @@
     "title": "Double Wires"
   },
   {
+    "link": "projects/drive-mad/index.html",
+    "imgSrc": "projects/drive-mad/drivemad.png",
+    "title": "Drive Mad"
+  },
+  {
     "link": "projects/draw-the-hill/index.html",
     "imgSrc": "projects/draw-the-hill/icons/icon-512.png",
     "title": "Draw the Hill"

@@ -85,5 +85,4 @@ adConsentCheckbox.addEventListener('change', function () {
   console.log("Ad consent status: " + this.checked);
   alert("Changes saved.");
 });
-
 var adStatus = adConsentCheckbox.checked;
