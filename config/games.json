@@ -425,6 +425,11 @@
     "title": "Mini-putt"
   },
   {
+    "link": "projects/monkeymart/index.html",
+    "imgSrc": "projects/monkeymart/bg_loading.png",
+    "title": "Monkey Mart"
+  },
+  {
     "link": "projects/missiles/index.html",
     "imgSrc": "projects/missiles/miss.png",
     "title": "Missiles"
