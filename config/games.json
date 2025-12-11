@@ -61,7 +61,7 @@
   },
   {
     "link": "projects/bitlife/index.html",
-    "imgSrc": "projects/bitlife/logobit.png",
+    "imgSrc": "projects/bitlife/bitlogo.png",
     "title": "BitLife"
   },
   {
@@ -428,6 +428,11 @@
     "link": "projects/miniputt/index.html",
     "imgSrc": "projects/miniputt/miniputt.png",
     "title": "Mini-putt"
+  },
+  {
+    "link": "projects/monkeymart/index.html",
+    "imgSrc": "projects/3kh0-assets-main-MonkeyMart/MonkeyMart/bg_loading.png",
+    "title": "Monkey Mart"
   },
   {
     "link": "projects/missiles/index.html",
