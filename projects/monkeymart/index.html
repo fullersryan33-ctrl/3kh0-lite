@@ -53,6 +53,24 @@
       };
       var is_iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
     </script>
+    <script id="engine-start" type="text/javascript">
+      var currentPercentage = 0;
+      Progress.updateProgress = function(percentage){
+        Progress.notifyListeners(percentage);
+        if(currentPercentage>percentage){ percentage = currentPercentage; }
+        currentPercentage = percentage;
+        var fg = document.getElementById('progress-bar-fg');
+        if (fg) { fg.style.clip = "rect(0px," + (fg.width * percentage/100) + "px," + fg.height + "px,0px)"; }
+        if(isNaN(percentage)){
+          var root = document.getElementById('progress-bar-root');
+          if (root) root.style.visibility = "hidden";
+        }
+      };
+      Progress.addProgress = function(){ var root = document.getElementById('progress-bar-root'); if (root) root.style.visibility = "visible"; };
+      Progress.removeProgress = function(){ var root = document.getElementById('progress-bar-root'); if (root) root.style.visibility = "hidden"; Module.canvas.style.background = ""; };
+      EngineLoader.stream_wasm = false;
+      EngineLoader.load("canvas", "MonkeyMart");
+    </script>
     <script src="/projects/3kh0-assets-main-MonkeyMart/MonkeyMart/MonkeyMart_wasm.js"></script>
   </body>
 </html>
