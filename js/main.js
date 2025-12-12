@@ -39,3 +39,32 @@ if (window.localStorage.hasOwnProperty("icon")) {
   document.querySelector("link[rel=icon]").href = local_icon;
   console.log("Icon set to: " + local_icon);
 }
+document.addEventListener("DOMContentLoaded", function () {
+  var selected = document.querySelector(".webgl-content") ||
+    document.querySelector("#gameContainer") ||
+    document.querySelector("#canvas-container") ||
+    document.querySelector("#unity-container") ||
+    document.querySelector("#ruffle") ||
+    document.querySelector("#c2canvasdiv") ||
+    document.querySelector("canvas");
+  if (!selected || !selected.parentNode) return;
+  var wrapper = document.createElement("div");
+  wrapper.style.width = "50%";
+  wrapper.style.margin = "0 auto";
+  wrapper.style.border = "1px solid #ccc";
+  wrapper.style.boxSizing = "border-box";
+  selected.parentNode.insertBefore(wrapper, selected);
+  wrapper.appendChild(selected);
+  selected.style.width = "100%";
+  var btn = document.createElement("button");
+  btn.textContent = "Full Screen";
+  btn.style.margin = "10px auto";
+  btn.style.display = "block";
+  btn.onclick = function () {
+    var el = wrapper;
+    if (el.requestFullscreen) el.requestFullscreen();
+    else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+    else if (el.msRequestFullscreen) el.msRequestFullscreen();
+  };
+  wrapper.parentNode.insertBefore(btn, wrapper);
+});
