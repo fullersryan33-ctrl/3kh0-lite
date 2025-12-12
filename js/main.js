@@ -60,15 +60,24 @@ document.addEventListener("DOMContentLoaded", function () {
   wrapper.style.aspectRatio = "16/9";
   selected.parentNode.insertBefore(wrapper, selected);
   wrapper.appendChild(selected);
-  selected.style.width = "100%";
-  selected.style.height = "100%";
-  var inner = selected.querySelector("#gameContainer") || selected.querySelector("canvas") || selected;
-  if (inner) {
-    inner.style.width = "100%";
-    inner.style.height = "100%";
-    inner.style.maxHeight = "100%";
-    inner.style.aspectRatio = "16/9";
-  }
+  wrapper.style.display = "flex";
+  wrapper.style.alignItems = "center";
+  wrapper.style.justifyContent = "center";
+  selected.style.width = "auto";
+  selected.style.height = "auto";
+  var fit = function () {
+    var w = wrapper.clientWidth;
+    var h = Math.round((w * 9) / 16);
+    wrapper.style.height = h + "px";
+    var sw = selected.scrollWidth || selected.clientWidth || selected.offsetWidth || w;
+    var sh = selected.scrollHeight || selected.clientHeight || selected.offsetHeight || h;
+    var scale = Math.min(w / sw, h / sh);
+    selected.style.transform = "scale(" + scale + ")";
+    selected.style.transformOrigin = "center center";
+  };
+  fit();
+  window.addEventListener("resize", fit);
+  document.addEventListener("fullscreenchange", fit);
   var btn = document.createElement("button");
   btn.setAttribute("aria-label", "Fullscreen");
   btn.style.position = "absolute";
@@ -87,6 +96,10 @@ document.addEventListener("DOMContentLoaded", function () {
   btn.style.backdropFilter = "blur(2px)";
   btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 0 0-2 2v4"/><path d="M15 3h4a2 2 0 0 1 2 2v4"/><path d="M9 21H5a2 2 0 0 1-2-2v-4"/><path d="M15 21h4a2 2 0 0 0 2-2v-4"/></svg>';
   btn.onclick = function () {
+    if (document.fullscreenElement) {
+      document.exitFullscreen && document.exitFullscreen();
+      return;
+    }
     var el = wrapper;
     if (el.requestFullscreen) el.requestFullscreen();
     else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
