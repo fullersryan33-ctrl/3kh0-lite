@@ -40,7 +40,9 @@ if (window.localStorage.hasOwnProperty("icon")) {
   console.log("Icon set to: " + local_icon);
 }
 document.addEventListener("DOMContentLoaded", function () {
-  var selected = document.querySelector(".webgl-content") ||
+  var selected = document.querySelector("#wrapper") ||
+    document.querySelector("#game") ||
+    document.querySelector(".webgl-content") ||
     document.querySelector("#gameContainer") ||
     document.querySelector("#canvas-container") ||
     document.querySelector("#unity-container") ||
@@ -65,9 +67,17 @@ document.addEventListener("DOMContentLoaded", function () {
   wrapper.style.justifyContent = "center";
   selected.style.width = "auto";
   selected.style.height = "auto";
+  var getRatio = function () {
+    var sw = selected.scrollWidth || selected.clientWidth || selected.offsetWidth || 0;
+    var sh = selected.scrollHeight || selected.clientHeight || selected.offsetHeight || 0;
+    if (sw > 0 && sh > 0) return sw / sh;
+    // fallback
+    return 16 / 9;
+  };
   var fit = function () {
     var w = wrapper.clientWidth;
-    var h = Math.round((w * 9) / 16);
+    var ratio = getRatio();
+    var h = Math.round(w / ratio);
     wrapper.style.height = h + "px";
     var sw = selected.scrollWidth || selected.clientWidth || selected.offsetWidth || w;
     var sh = selected.scrollHeight || selected.clientHeight || selected.offsetHeight || h;
@@ -78,6 +88,11 @@ document.addEventListener("DOMContentLoaded", function () {
   fit();
   window.addEventListener("resize", fit);
   document.addEventListener("fullscreenchange", fit);
+  // observe DOM changes to re-fit when games change layout
+  try {
+    var obs = new MutationObserver(function () { fit(); });
+    obs.observe(selected, { childList: true, subtree: true, attributes: true });
+  } catch (e) {}
   var btn = document.createElement("button");
   btn.setAttribute("aria-label", "Fullscreen");
   btn.style.position = "absolute";
