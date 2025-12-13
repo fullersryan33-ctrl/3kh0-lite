@@ -175,3 +175,4 @@ document.addEventListener("DOMContentLoaded", function () {
   document.addEventListener("fullscreenchange", fit);
   try{ var mo = new MutationObserver(function(){ fit(); }); mo.observe(root,{childList:true,subtree:true,attributes:true}); }catch(e){}
 });
+
