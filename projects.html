@@ -97,9 +97,17 @@
       fetch("config/games.json")
       .then((response) => response.json())
       .then((data) => {
-        games = data;
+        const cmp = function(a,b){
+          var ta=a.title||"", tb=b.title||"";
+          var ma=ta.match(/^\d+/), mb=tb.match(/^\d+/);
+          if(ma&&mb){var na=parseInt(ma[0],10), nb=parseInt(mb[0],10); if(na!==nb) return na-nb; return ta.localeCompare(tb);}
+          if(ma) return -1;
+          if(mb) return 1;
+          return ta.localeCompare(tb);
+        };
+        games = data.slice().sort(cmp);
         const container = document.getElementById("game-container");
-        data.forEach((project) => {
+        games.forEach((project) => {
           const game = document.createElement("a");
           game.href = project.link;
             game.className = "game-link container";
@@ -121,6 +129,11 @@
         container.innerHTML = "";
         games
           .filter((game) => game.title.toUpperCase().includes(filter))
+          .sort(function(a,b){
+            var ta=a.title||"", tb=b.title||"";
+            var ma=ta.match(/^\d+/), mb=tb.match(/^\d+/);
+            if(ma&&mb){var na=parseInt(ma[0],10), nb=parseInt(mb[0],10); if(na!==nb) return na-nb; return ta.localeCompare(tb);} if(ma) return -1; if(mb) return 1; return ta.localeCompare(tb);
+          })
           .forEach((project) => {
             const game = document.createElement("a");
             game.href = project.link;
