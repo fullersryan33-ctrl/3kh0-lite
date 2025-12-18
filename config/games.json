@@ -749,4 +749,24 @@
     "imgSrc": "projects/you-are-bezos/img/banner.png",
     "title": "You Are Jeff Bezos"
   }
+  ,{
+    "link": "projects/yoho/index.html",
+    "imgSrc": "projects/yoho/yoho.png",
+    "title": "Yoho"
+  }
+  ,{
+    "link": "projects/99-balls/index.html",
+    "imgSrc": "projects/99-balls/logo.png",
+    "title": "99 Balls"
+  }
+  ,{
+    "link": "projects/2048-multi-task/index.html",
+    "imgSrc": "projects/2048-multi-task/logo.png",
+    "title": "2048 Multi Task"
+  }
+  ,{
+    "link": "projects/10-minutes-till-dawn/index.html",
+    "imgSrc": "projects/10-minutes-till-dawn/logo.png",
+    "title": "10 Minutes Till Dawn"
+  }
 ]
