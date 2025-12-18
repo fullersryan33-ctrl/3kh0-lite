@@ -751,22 +751,22 @@
   }
   ,{
     "link": "projects/yoho/index.html",
-    "imgSrc": "projects/yoho/yoho.png",
+    "imgSrc": "projects/yoho/yoho.svg",
     "title": "Yoho"
   }
   ,{
     "link": "projects/99-balls/index.html",
-    "imgSrc": "projects/99-balls/logo.png",
+    "imgSrc": "projects/99-balls/logo.svg",
     "title": "99 Balls"
   }
   ,{
     "link": "projects/2048-multi-task/index.html",
-    "imgSrc": "projects/2048-multi-task/logo.png",
+    "imgSrc": "projects/2048-multi-task/logo.svg",
     "title": "2048 Multi Task"
   }
   ,{
     "link": "projects/10-minutes-till-dawn/index.html",
-    "imgSrc": "projects/10-minutes-till-dawn/logo.png",
+    "imgSrc": "projects/10-minutes-till-dawn/logo.svg",
     "title": "10 Minutes Till Dawn"
   }
 ]
