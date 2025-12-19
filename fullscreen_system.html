@@ -42,6 +42,16 @@
             overflow: hidden;
         }
 
+        /* Responsive iframe wrapper technique */
+        .iframe-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio fallback */
+        }
+
         .game-iframe {
             position: absolute;
             top: 0;
@@ -49,46 +59,6 @@
             width: 100%;
             height: 100%;
             border: none;
-        }
-
-        /* Fallback message styling */
-        .fallback-message {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            padding: 40px;
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 12px;
-            max-width: 500px;
-        }
-
-        .fallback-message h2 {
-            margin-bottom: 20px;
-            font-size: 24px;
-        }
-
-        .fallback-message p {
-            margin-bottom: 20px;
-            color: #ccc;
-            line-height: 1.6;
-        }
-
-        .open-tab-btn {
-            background: #4a90e2;
-            border: none;
-            padding: 14px 28px;
-            border-radius: 6px;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background 0.3s;
-            font-weight: 500;
-        }
-
-        .open-tab-btn:hover {
-            background: #357abd;
         }
 
         /* Hide default placeholder text */
@@ -324,38 +294,90 @@
         }
         
         if(src){
+          // Create wrapper for better iframe control
+          const wrapper = document.createElement('div');
+          wrapper.className = 'iframe-wrapper';
+          
           const iframe = document.createElement('iframe');
           iframe.className = 'game-iframe';
           iframe.src = src;
           iframe.allowFullscreen = true;
           iframe.scrolling = 'no';
           iframe.allow = 'autoplay; fullscreen; gamepad; microphone; camera; accelerometer; gyroscope; magnetometer; xr-spatial-tracking';
+          
+          // Critical: Set these attributes to ensure nested iframes work
           iframe.setAttribute('frameborder', '0');
           iframe.setAttribute('allowtransparency', 'true');
           
-          document.getElementById('gameContent').appendChild(iframe);
+          wrapper.appendChild(iframe);
+          document.getElementById('gameContent').appendChild(wrapper);
           
-          // Check if game loads properly after 3 seconds
-          let loadCheckTimeout = setTimeout(() => {
+          // Inject CSS into iframe to handle nested iframes and canvas elements
+          iframe.onload = function() {
             try {
               const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-              // If we can access the document, try to inject styles
               const style = document.createElement('style');
               style.textContent = `
-                * { margin: 0 !important; padding: 0 !important; box-sizing: border-box !important; }
-                html, body { width: 100% !important; height: 100% !important; overflow: hidden !important; }
-                iframe { position: absolute !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; border: 0 !important; }
-                canvas { width: 100% !important; height: 100% !important; display: block !important; }
+                * {
+                  margin: 0 !important;
+                  padding: 0 !important;
+                  box-sizing: border-box !important;
+                }
+                html, body { 
+                  width: 100vw !important; 
+                  height: 100vh !important; 
+                  overflow: hidden !important;
+                  position: fixed !important;
+                  top: 0 !important;
+                  left: 0 !important;
+                }
+                iframe {
+                  position: fixed !important;
+                  top: 0 !important;
+                  left: 0 !important;
+                  width: 100vw !important;
+                  height: 100vh !important;
+                  border: 0 !important;
+                  min-width: 100vw !important;
+                  min-height: 100vh !important;
+                }
+                canvas { 
+                  width: 100% !important; 
+                  height: 100% !important; 
+                  display: block !important;
+                  position: absolute !important;
+                  top: 0 !important;
+                  left: 0 !important;
+                }
+                #webgl-content, #gameContainer, #unity-container, .webgl-content {
+                  width: 100% !important;
+                  height: 100% !important;
+                  position: absolute !important;
+                  top: 0 !important;
+                  left: 0 !important;
+                }
               `;
               iframeDoc.head.appendChild(style);
+              
+              // For nested iframes, try to access and style them too
+              setTimeout(() => {
+                try {
+                  const nestedIframes = iframeDoc.querySelectorAll('iframe');
+                  nestedIframes.forEach(nested => {
+                    nested.style.cssText = 'position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; border: 0 !important;';
+                  });
+                } catch (e) {
+                  console.log('Cannot access nested iframe');
+                }
+              }, 100);
+              
             } catch (e) {
-              // Cross-origin - this is expected for games like 1v1 Space
-              console.log('Cross-origin iframe detected');
+              // Cross-origin - can't inject styles, but basic iframe sizing will still work
+              console.log('Cross-origin iframe detected - using default sizing');
             }
-          }, 500);
-          
+          };
         } else {
-          document.getElementById('gameContent').innerHTML = '<p style="text-align: center; color: #888;">No game source provided</p>';
+          document.getElementById('gameContent').innerHTML = '<p>No game source provided</p>';
         }
     </script>
 </body>
