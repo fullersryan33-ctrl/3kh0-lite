@@ -360,6 +360,11 @@
     "title": "Hextris"
   },
   {
+    "link": "projects/hollowknight-main/index.html",
+    "imgSrc": "projects/hollowknight-main/hollow_knight___dock_icon_by_thecheshireguy_deihvji-fullview.png",
+    "title": "Hollow Knight"
+  },
+  {
     "link": "projects/idle-breakout/index.html",
     "imgSrc": "projects/idle-breakout/img/thumbnail.png",
     "title": "Idle Breakout"
@@ -768,10 +773,5 @@
     "link": "projects/10-minutes-till-dawn/index.html",
     "imgSrc": "projects/10minutestilldawn/10-minutes-till-dawn/icon.png",
     "title": "10 Minutes Till Dawn"
-  }
-  ,{
-    "link": "https://hollowknight.com/",
-    "imgSrc": "https://upload.wikimedia.org/wikipedia/en/2/2a/Hollow_Knight_cover.jpg",
-    "title": "Hollow Knight"
   }
   ]
