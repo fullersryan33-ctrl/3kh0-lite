@@ -107,9 +107,10 @@
         };
         games = data.slice().sort(cmp);
         const container = document.getElementById("game-container");
-        games.forEach((project) => {
+        data.forEach((project) => {
           const game = document.createElement("a");
-          game.href = project.link;
+          const href = 'fullscreen_system.html?src=' + encodeURIComponent(project.link) + '&title=' + encodeURIComponent(project.title);
+          game.href = href;
             game.className = "game-link container";
             game.innerHTML = `
             <div class="game-tile">
@@ -136,7 +137,8 @@
           })
           .forEach((project) => {
             const game = document.createElement("a");
-            game.href = project.link;
+            const href = 'fullscreen_system.html?src=' + encodeURIComponent(project.link) + '&title=' + encodeURIComponent(project.title);
+            game.href = href;
             game.className = "game-link container";
             game.innerHTML = `
             <div class="game-tile">
