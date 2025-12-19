@@ -42,6 +42,16 @@
             overflow: hidden;
         }
 
+        /* Responsive iframe wrapper technique */
+        .iframe-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio fallback */
+        }
+
         .game-iframe {
             position: absolute;
             top: 0;
@@ -284,6 +294,10 @@
         }
         
         if(src){
+          // Create wrapper for better iframe control
+          const wrapper = document.createElement('div');
+          wrapper.className = 'iframe-wrapper';
+          
           const iframe = document.createElement('iframe');
           iframe.className = 'game-iframe';
           iframe.src = src;
@@ -295,7 +309,8 @@
           iframe.setAttribute('frameborder', '0');
           iframe.setAttribute('allowtransparency', 'true');
           
-          document.getElementById('gameContent').appendChild(iframe);
+          wrapper.appendChild(iframe);
+          document.getElementById('gameContent').appendChild(wrapper);
           
           // Inject CSS into iframe to handle nested iframes and canvas elements
           iframe.onload = function() {
@@ -309,20 +324,22 @@
                   box-sizing: border-box !important;
                 }
                 html, body { 
-                  width: 100% !important; 
-                  height: 100% !important; 
+                  width: 100vw !important; 
+                  height: 100vh !important; 
                   overflow: hidden !important;
-                  position: relative !important;
-                }
-                iframe {
-                  position: absolute !important;
+                  position: fixed !important;
                   top: 0 !important;
                   left: 0 !important;
-                  width: 100% !important;
-                  height: 100% !important;
+                }
+                iframe {
+                  position: fixed !important;
+                  top: 0 !important;
+                  left: 0 !important;
+                  width: 100vw !important;
+                  height: 100vh !important;
                   border: 0 !important;
-                  min-width: 100% !important;
-                  min-height: 100% !important;
+                  min-width: 100vw !important;
+                  min-height: 100vh !important;
                 }
                 canvas { 
                   width: 100% !important; 
@@ -347,7 +364,7 @@
                 try {
                   const nestedIframes = iframeDoc.querySelectorAll('iframe');
                   nestedIframes.forEach(nested => {
-                    nested.style.cssText = 'position: absolute !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; border: 0 !important;';
+                    nested.style.cssText = 'position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; border: 0 !important;';
                   });
                 } catch (e) {
                   console.log('Cannot access nested iframe');
