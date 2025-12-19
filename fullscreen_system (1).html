@@ -42,6 +42,14 @@
             overflow: hidden;
         }
 
+        .iframe-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
         .game-iframe {
             position: absolute;
             top: 0;
@@ -317,10 +325,24 @@
         var params=getParams();
         var src=params.src||'';
         var title=params.title||'';
+
+        function deriveTitleFromSrc(u){
+          try{
+            var path=u.split('?')[0];
+            var parts=path.split('/').filter(Boolean);
+            var name=(parts[parts.length-2]||parts[parts.length-1]||'').toLowerCase();
+            name=name.replace(/^3kh0-assets-main-/,'');
+            name=name.replace(/[-_]+/g,' ');
+            return name.replace(/\b\w/g,function(m){return m.toUpperCase()});
+          }catch(e){return 'Game'}
+        }
         
         if(title){
           var t=document.getElementById('gameTitle');
           if(t) t.textContent=title;
+        } else if(src){
+          var t=document.getElementById('gameTitle');
+          if(t) t.textContent=deriveTitleFromSrc(src);
         }
         
         if(src){
@@ -330,7 +352,7 @@
           
           const iframe = document.createElement('iframe');
           iframe.className = 'game-iframe';
-          iframe.src = src;
+          iframe.src = src.charAt(0)==='/' ? src : (location.pathname.replace(/[^/]+$/,'') + src);
           iframe.allowFullscreen = true;
           iframe.scrolling = 'no';
           iframe.allow = 'autoplay; fullscreen; gamepad; microphone; camera; accelerometer; gyroscope; magnetometer; xr-spatial-tracking';
