@@ -99,9 +99,14 @@
       .then((data) => {
         games = data;
         const container = document.getElementById("game-container");
+        const repoRoot = (function(){
+          var parts = location.pathname.split('/');
+          return (parts.length>2 && parts[1]) ? ('/' + parts[1] + '/') : '/';
+        })();
         data.forEach((project) => {
           const game = document.createElement("a");
-          game.href = project.link;
+          const link = (project.link||'').replace(/^\//,'');
+          game.href = repoRoot + link;
             game.className = "game-link container";
             game.innerHTML = `
             <div class="game-tile">
@@ -123,7 +128,8 @@
           .filter((game) => game.title.toUpperCase().includes(filter))
           .forEach((project) => {
             const game = document.createElement("a");
-            game.href = project.link;
+            const link = (project.link||'').replace(/^\//,'');
+            game.href = repoRoot + link;
             game.className = "game-link container";
             game.innerHTML = `
             <div class="game-tile">
