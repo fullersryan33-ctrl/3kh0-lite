@@ -770,9 +770,20 @@
     "title": "You Are Jeff Bezos"
   }
   ,{
+<<<<<<< Updated upstream
     "link": "projects/YoHoHo.io/index.html",
     "imgSrc": "projects/YoHoHo.io/favicon/apple-touch-icon.png",
     "title": "YoHoHo"
+=======
+    "link": "projects/yoho/index.html",
+    "imgSrc": "projects/3kh0-assets-main-yohoho/yohoho/yohoho.png",
+    "title": "Yoho"
+  },
+  {
+    "link": "projects/python-chess/index.html",
+    "imgSrc": "projects/python-chess/thumbnail.png",
+    "title": "Python Chess"
+>>>>>>> Stashed changes
   }
   
 
