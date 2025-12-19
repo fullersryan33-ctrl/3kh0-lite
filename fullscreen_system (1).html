@@ -51,6 +51,46 @@
             border: none;
         }
 
+        /* Fallback message styling */
+        .fallback-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            padding: 40px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 12px;
+            max-width: 500px;
+        }
+
+        .fallback-message h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .fallback-message p {
+            margin-bottom: 20px;
+            color: #ccc;
+            line-height: 1.6;
+        }
+
+        .open-tab-btn {
+            background: #4a90e2;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 6px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-weight: 500;
+        }
+
+        .open-tab-btn:hover {
+            background: #357abd;
+        }
+
         /* Hide default placeholder text */
         .game-content > p {
             position: absolute;
@@ -289,50 +329,56 @@
           iframe.src = src;
           iframe.allowFullscreen = true;
           iframe.scrolling = 'no';
+          iframe.allow = 'autoplay; fullscreen; gamepad; microphone; camera; accelerometer; gyroscope; magnetometer; xr-spatial-tracking';
+          iframe.setAttribute('frameborder', '0');
+          iframe.setAttribute('allowtransparency', 'true');
           
-          // Add sandbox with all permissions to avoid restrictions
-          iframe.setAttribute('sandbox', 'allow-same-origin allow-scripts allow-popups allow-forms allow-pointer-lock allow-orientation-lock allow-modals');
+          // Don't use sandbox - it breaks many games
+          // iframe.setAttribute('sandbox', 'allow-same-origin allow-scripts allow-popups allow-forms allow-pointer-lock allow-orientation-lock allow-modals');
           
           document.getElementById('gameContent').appendChild(iframe);
           
-          // Try to detect and scale the game after it loads
+          // Try to inject CSS for same-origin iframes
           iframe.onload = function() {
             try {
-              // Give the game time to initialize
-              setTimeout(() => {
-                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-                const canvas = iframeDoc.querySelector('canvas');
-                
-                if (canvas) {
-                  // Force canvas to fill container
-                  const style = document.createElement('style');
-                  style.textContent = `
-                    body, html { 
-                      margin: 0 !important; 
-                      padding: 0 !important; 
-                      width: 100% !important; 
-                      height: 100% !important; 
-                      overflow: hidden !important;
-                    }
-                    canvas { 
-                      width: 100% !important; 
-                      height: 100% !important; 
-                      max-width: 100% !important;
-                      max-height: 100% !important;
-                      display: block !important;
-                      object-fit: contain !important;
-                    }
-                  `;
-                  iframeDoc.head.appendChild(style);
+              const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+              const style = document.createElement('style');
+              style.textContent = `
+                * { margin: 0 !important; padding: 0 !important; box-sizing: border-box !important; }
+                html, body { 
+                  width: 100% !important; 
+                  height: 100% !important; 
+                  overflow: hidden !important; 
                 }
-              }, 500);
+                iframe { 
+                  position: absolute !important; 
+                  top: 0 !important; 
+                  left: 0 !important; 
+                  width: 100% !important; 
+                  height: 100% !important; 
+                  border: 0 !important; 
+                }
+                canvas { 
+                  width: 100% !important; 
+                  height: 100% !important; 
+                  display: block !important; 
+                }
+                #gameContainer, .webgl-content, #unityContainer {
+                  width: 100% !important;
+                  height: 100% !important;
+                  position: absolute !important;
+                  top: 0 !important;
+                  left: 0 !important;
+                }
+              `;
+              iframeDoc.head.appendChild(style);
             } catch (e) {
-              // Cross-origin restrictions prevent this, but that's okay
-              console.log('Cannot access iframe content (cross-origin)');
+              // Cross-origin iframe - can't inject styles
+              console.log('Cross-origin iframe detected');
             }
           };
         } else {
-          document.getElementById('gameContent').innerHTML = '<p>No game source provided</p>';
+          document.getElementById('gameContent').innerHTML = '<p style="text-align: center; color: #888;">No game source provided</p>';
         }
     </script>
 </body>
