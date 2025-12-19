@@ -94,15 +94,15 @@
     <button id="back-to-top" style="display: none; position: fixed; bottom: 20px; right: 20px;">Back to top</button>
     <script>
       let games = [];
+      const repoRoot = (function(){
+        var parts = location.pathname.split('/');
+        return (parts.length>2 && parts[1]) ? ('/' + parts[1] + '/') : '/';
+      })();
       fetch("config/games.json")
       .then((response) => response.json())
       .then((data) => {
         games = data;
         const container = document.getElementById("game-container");
-        const repoRoot = (function(){
-          var parts = location.pathname.split('/');
-          return (parts.length>2 && parts[1]) ? ('/' + parts[1] + '/') : '/';
-        })();
         data.forEach((project) => {
           const game = document.createElement("a");
           const raw = project.link||'';
