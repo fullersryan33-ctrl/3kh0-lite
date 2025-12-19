@@ -98,7 +98,7 @@
         var parts = location.pathname.split('/');
         return (parts.length>2 && parts[1]) ? ('/' + parts[1] + '/') : '/';
       })();
-      fetch("config/games.json")
+      fetch("config/games.json?v=" + Date.now())
       .then((response) => response.json())
       .then((data) => {
         games = data;
