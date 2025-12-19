@@ -42,14 +42,6 @@
             overflow: hidden;
         }
 
-        .iframe-wrapper {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-
         .game-iframe {
             position: absolute;
             top: 0;
@@ -57,46 +49,6 @@
             width: 100%;
             height: 100%;
             border: none;
-        }
-
-        /* Fallback message styling */
-        .fallback-message {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            padding: 40px;
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 12px;
-            max-width: 500px;
-        }
-
-        .fallback-message h2 {
-            margin-bottom: 20px;
-            font-size: 24px;
-        }
-
-        .fallback-message p {
-            margin-bottom: 20px;
-            color: #ccc;
-            line-height: 1.6;
-        }
-
-        .open-tab-btn {
-            background: #4a90e2;
-            border: none;
-            padding: 14px 28px;
-            border-radius: 6px;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background 0.3s;
-            font-weight: 500;
-        }
-
-        .open-tab-btn:hover {
-            background: #357abd;
         }
 
         /* Hide default placeholder text */
@@ -325,115 +277,58 @@
         var params=getParams();
         var src=params.src||'';
         var title=params.title||'';
-
-        function deriveTitleFromSrc(u){
-          try{
-            var path=u.split('?')[0];
-            var parts=path.split('/').filter(Boolean);
-            var name=(parts[parts.length-2]||parts[parts.length-1]||'').toLowerCase();
-            name=name.replace(/^3kh0-assets-main-/,'');
-            name=name.replace(/[-_]+/g,' ');
-            return name.replace(/\b\w/g,function(m){return m.toUpperCase()});
-          }catch(e){return 'Game'}
-        }
         
         if(title){
           var t=document.getElementById('gameTitle');
           if(t) t.textContent=title;
-        } else if(src){
-          var t=document.getElementById('gameTitle');
-          if(t) t.textContent=deriveTitleFromSrc(src);
         }
         
         if(src){
-          // Create wrapper for better iframe control
-          const wrapper = document.createElement('div');
-          wrapper.className = 'iframe-wrapper';
-          
           const iframe = document.createElement('iframe');
           iframe.className = 'game-iframe';
-          var resolvedSrc = src;
-          if (/^https?:\/\//i.test(src)) {
-            resolvedSrc = src;
-          } else if (src.charAt(0)==='/') {
-            resolvedSrc = src;
-          } else {
-            resolvedSrc = location.pathname.replace(/[^/]+$/,'') + src;
-          }
-          iframe.src = resolvedSrc;
+          iframe.src = src;
           iframe.allowFullscreen = true;
           iframe.scrolling = 'no';
-          iframe.allow = 'autoplay; fullscreen; gamepad; microphone; camera; accelerometer; gyroscope; magnetometer; xr-spatial-tracking';
           
-          // Critical: Set these attributes to ensure nested iframes work
-          iframe.setAttribute('frameborder', '0');
-          iframe.setAttribute('allowtransparency', 'true');
+          // Add sandbox with all permissions to avoid restrictions
+          iframe.setAttribute('sandbox', 'allow-same-origin allow-scripts allow-popups allow-forms allow-pointer-lock allow-orientation-lock allow-modals');
           
-          wrapper.appendChild(iframe);
-          document.getElementById('gameContent').appendChild(wrapper);
+          document.getElementById('gameContent').appendChild(iframe);
           
-          // Inject CSS into iframe to handle nested iframes and canvas elements
+          // Try to detect and scale the game after it loads
           iframe.onload = function() {
             try {
-              const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-              const style = document.createElement('style');
-              style.textContent = `
-                * {
-                  margin: 0 !important;
-                  padding: 0 !important;
-                  box-sizing: border-box !important;
-                }
-                html, body { 
-                  width: 100vw !important; 
-                  height: 100vh !important; 
-                  overflow: hidden !important;
-                  position: fixed !important;
-                  top: 0 !important;
-                  left: 0 !important;
-                }
-                iframe {
-                  position: fixed !important;
-                  top: 0 !important;
-                  left: 0 !important;
-                  width: 100vw !important;
-                  height: 100vh !important;
-                  border: 0 !important;
-                  min-width: 100vw !important;
-                  min-height: 100vh !important;
-                }
-                canvas { 
-                  width: 100% !important; 
-                  height: 100% !important; 
-                  display: block !important;
-                  position: absolute !important;
-                  top: 0 !important;
-                  left: 0 !important;
-                }
-                #webgl-content, #gameContainer, #unity-container, .webgl-content {
-                  width: 100% !important;
-                  height: 100% !important;
-                  position: absolute !important;
-                  top: 0 !important;
-                  left: 0 !important;
-                }
-              `;
-              iframeDoc.head.appendChild(style);
-              
-              // For nested iframes, try to access and style them too
+              // Give the game time to initialize
               setTimeout(() => {
-                try {
-                  const nestedIframes = iframeDoc.querySelectorAll('iframe');
-                  nestedIframes.forEach(nested => {
-                    nested.style.cssText = 'position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; border: 0 !important;';
-                  });
-                } catch (e) {
-                  console.log('Cannot access nested iframe');
+                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                const canvas = iframeDoc.querySelector('canvas');
+                
+                if (canvas) {
+                  // Force canvas to fill container
+                  const style = document.createElement('style');
+                  style.textContent = `
+                    body, html { 
+                      margin: 0 !important; 
+                      padding: 0 !important; 
+                      width: 100% !important; 
+                      height: 100% !important; 
+                      overflow: hidden !important;
+                    }
+                    canvas { 
+                      width: 100% !important; 
+                      height: 100% !important; 
+                      max-width: 100% !important;
+                      max-height: 100% !important;
+                      display: block !important;
+                      object-fit: contain !important;
+                    }
+                  `;
+                  iframeDoc.head.appendChild(style);
                 }
-              }, 100);
-              
+              }, 500);
             } catch (e) {
-              // Cross-origin - can't inject styles, but basic iframe sizing will still work
-              console.log('Cross-origin iframe detected - using default sizing');
+              // Cross-origin restrictions prevent this, but that's okay
+              console.log('Cannot access iframe content (cross-origin)');
             }
           };
         } else {
