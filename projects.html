@@ -105,9 +105,11 @@
         })();
         data.forEach((project) => {
           const game = document.createElement("a");
-          const link = (project.link||'').replace(/^\//,'');
+          const raw = project.link||'';
+          const isExternal = /^https?:\/\//.test(raw);
+          const link = isExternal ? raw : (repoRoot + raw.replace(/^\//,''));
           const wrapper = encodeURIComponent('fullscreen_system (1).html');
-          const href = repoRoot + wrapper + '?src=' + encodeURIComponent(repoRoot + link) + '&title=' + encodeURIComponent(project.title||'');
+          const href = repoRoot + wrapper + '?src=' + encodeURIComponent(link) + '&title=' + encodeURIComponent(project.title||'');
           game.href = href;
             game.className = "game-link container";
             game.innerHTML = `
@@ -130,9 +132,11 @@
           .filter((game) => game.title.toUpperCase().includes(filter))
           .forEach((project) => {
             const game = document.createElement("a");
-            const link = (project.link||'').replace(/^\//,'');
+            const raw = project.link||'';
+            const isExternal = /^https?:\/\//.test(raw);
+            const link = isExternal ? raw : (repoRoot + raw.replace(/^\//,''));
             const wrapper = encodeURIComponent('fullscreen_system (1).html');
-            const href = repoRoot + wrapper + '?src=' + encodeURIComponent(repoRoot + link) + '&title=' + encodeURIComponent(project.title||'');
+            const href = repoRoot + wrapper + '?src=' + encodeURIComponent(link) + '&title=' + encodeURIComponent(project.title||'');
             game.href = href;
             game.className = "game-link container";
             game.innerHTML = `

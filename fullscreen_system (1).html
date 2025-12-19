@@ -352,7 +352,15 @@
           
           const iframe = document.createElement('iframe');
           iframe.className = 'game-iframe';
-          iframe.src = src.charAt(0)==='/' ? src : (location.pathname.replace(/[^/]+$/,'') + src);
+          var resolvedSrc = src;
+          if (/^https?:\/\//i.test(src)) {
+            resolvedSrc = src;
+          } else if (src.charAt(0)==='/') {
+            resolvedSrc = src;
+          } else {
+            resolvedSrc = location.pathname.replace(/[^/]+$/,'') + src;
+          }
+          iframe.src = resolvedSrc;
           iframe.allowFullscreen = true;
           iframe.scrolling = 'no';
           iframe.allow = 'autoplay; fullscreen; gamepad; microphone; camera; accelerometer; gyroscope; magnetometer; xr-spatial-tracking';
