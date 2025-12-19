@@ -97,20 +97,11 @@
       fetch("config/games.json")
       .then((response) => response.json())
       .then((data) => {
-        const cmp = function(a,b){
-          var ta=a.title||"", tb=b.title||"";
-          return ta.localeCompare(tb);
-        };
-        games = data.slice().sort(cmp);
+        games = data;
         const container = document.getElementById("game-container");
-        games.forEach((project) => {
+        data.forEach((project) => {
           const game = document.createElement("a");
-          if ((project.link||'').indexOf('projects/1v1space/index.html') !== -1) {
-            game.href = project.link;
-          } else {
-            const href = 'fullscreen_system.html?src=' + encodeURIComponent(project.link) + '&title=' + encodeURIComponent(project.title);
-            game.href = href;
-          }
+          game.href = project.link;
             game.className = "game-link container";
             game.innerHTML = `
             <div class="game-tile">
@@ -130,18 +121,9 @@
         container.innerHTML = "";
         games
           .filter((game) => game.title.toUpperCase().includes(filter))
-          .sort(function(a,b){
-            var ta=a.title||"", tb=b.title||"";
-            return ta.localeCompare(tb);
-          })
           .forEach((project) => {
             const game = document.createElement("a");
-            if ((project.link||'').indexOf('projects/1v1space/index.html') !== -1) {
-              game.href = project.link;
-            } else {
-              const href = 'fullscreen_system.html?src=' + encodeURIComponent(project.link) + '&title=' + encodeURIComponent(project.title);
-              game.href = href;
-            }
+            game.href = project.link;
             game.className = "game-link container";
             game.innerHTML = `
             <div class="game-tile">
