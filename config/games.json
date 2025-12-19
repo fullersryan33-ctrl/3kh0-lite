@@ -751,27 +751,27 @@
   }
   ,{
     "link": "projects/yoho/index.html",
-    "imgSrc": "projects/yoho/yoho.svg",
-    "title": "YoHoHo"
+    "imgSrc": "projects/3kh0-assets-main-yohoho/yohoho/yohoho.png",
+    "title": "Yoho"
   }
   ,{
     "link": "projects/99-balls/index.html",
-    "imgSrc": "projects/99-balls/logo.svg",
+    "imgSrc": "projects/3kh0-assets-main-99balls/99balls/99-balls-evo.jpg",
     "title": "99 Balls"
   }
   ,{
     "link": "projects/2048-multi-task/index.html",
-    "imgSrc": "projects/2048-multi-task/logo.svg",
+    "imgSrc": "projects/3kh0-assets-main-2048-multitask/2048-multitask/favicon.ico",
     "title": "2048 Multi Task"
   }
   ,{
     "link": "projects/10-minutes-till-dawn/index.html",
-    "imgSrc": "projects/10-minutes-till-dawn/logo.svg",
+    "imgSrc": "projects/10minutestilldawn/10-minutes-till-dawn/icon.png",
     "title": "10 Minutes Till Dawn"
   }
   ,{
-    "link": "projects/hollowknight-main/index.html",
-    "imgSrc": "projects/hollowknight-main/hollow_knight___dock_icon_by_thecheshireguy_deihvji-fullview.png",
+    "link": "https://hollowknight.com/",
+    "imgSrc": "https://upload.wikimedia.org/wikipedia/en/2/2a/Hollow_Knight_cover.jpg",
     "title": "Hollow Knight"
   }
   ]
