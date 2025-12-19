@@ -99,18 +99,18 @@
       .then((data) => {
         const cmp = function(a,b){
           var ta=a.title||"", tb=b.title||"";
-          var ma=ta.match(/^\d+/), mb=tb.match(/^\d+/);
-          if(ma&&mb){var na=parseInt(ma[0],10), nb=parseInt(mb[0],10); if(na!==nb) return na-nb; return ta.localeCompare(tb);}
-          if(ma) return -1;
-          if(mb) return 1;
           return ta.localeCompare(tb);
         };
         games = data.slice().sort(cmp);
         const container = document.getElementById("game-container");
-        data.forEach((project) => {
+        games.forEach((project) => {
           const game = document.createElement("a");
-          const href = 'fullscreen_system.html?src=' + encodeURIComponent(project.link) + '&title=' + encodeURIComponent(project.title);
-          game.href = href;
+          if ((project.link||'').indexOf('projects/1v1space/index.html') !== -1) {
+            game.href = project.link;
+          } else {
+            const href = 'fullscreen_system.html?src=' + encodeURIComponent(project.link) + '&title=' + encodeURIComponent(project.title);
+            game.href = href;
+          }
             game.className = "game-link container";
             game.innerHTML = `
             <div class="game-tile">
@@ -132,13 +132,16 @@
           .filter((game) => game.title.toUpperCase().includes(filter))
           .sort(function(a,b){
             var ta=a.title||"", tb=b.title||"";
-            var ma=ta.match(/^\d+/), mb=tb.match(/^\d+/);
-            if(ma&&mb){var na=parseInt(ma[0],10), nb=parseInt(mb[0],10); if(na!==nb) return na-nb; return ta.localeCompare(tb);} if(ma) return -1; if(mb) return 1; return ta.localeCompare(tb);
+            return ta.localeCompare(tb);
           })
           .forEach((project) => {
             const game = document.createElement("a");
-            const href = 'fullscreen_system.html?src=' + encodeURIComponent(project.link) + '&title=' + encodeURIComponent(project.title);
-            game.href = href;
+            if ((project.link||'').indexOf('projects/1v1space/index.html') !== -1) {
+              game.href = project.link;
+            } else {
+              const href = 'fullscreen_system.html?src=' + encodeURIComponent(project.link) + '&title=' + encodeURIComponent(project.title);
+              game.href = href;
+            }
             game.className = "game-link container";
             game.innerHTML = `
             <div class="game-tile">
