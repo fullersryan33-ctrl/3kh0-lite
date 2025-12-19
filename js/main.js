@@ -45,11 +45,14 @@ document.addEventListener('DOMContentLoaded', function(){
   var parts = location.pathname.split('/');
   var repoRoot = (parts.length>2 && parts[1]) ? ('/' + parts[1] + '/') : '/';
   Array.prototype.forEach.call(document.querySelectorAll('a[href^="/"]'), function(a){
-    var h = a.getAttribute('href');
-    if (!/^https?:\/\//i.test(h)) a.setAttribute('href', repoRoot + h.replace(/^\//,''));
+    var h = a.getAttribute('href') || '';
+    if (/^https?:\/\//i.test(h)) return;
+    if (h.indexOf(repoRoot) === 0) return;
+    a.setAttribute('href', repoRoot + h.replace(/^\//,''));
   });
   Array.prototype.forEach.call(document.querySelectorAll('link[rel="icon"][href^="/"]'), function(l){
-    var h = l.getAttribute('href');
+    var h = l.getAttribute('href') || '';
+    if (h.indexOf(repoRoot) === 0) return;
     l.setAttribute('href', repoRoot + h.replace(/^\//,''));
   });
 });
