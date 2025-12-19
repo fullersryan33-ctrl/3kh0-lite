@@ -34,6 +34,9 @@
         }
 
         .game-content {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             display: flex;
@@ -44,6 +47,9 @@
         }
 
         .game-iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             border: none;
@@ -59,12 +65,15 @@
             justify-content: space-between;
             align-items: center;
             z-index: 10;
+            pointer-events: none;
         }
 
         .game-title {
             font-size: 32px;
             font-weight: 500;
             color: white;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+            pointer-events: none;
         }
 
         .fullscreen-btn {
@@ -79,6 +88,8 @@
             align-items: center;
             gap: 8px;
             transition: background 0.3s;
+            backdrop-filter: blur(10px);
+            pointer-events: all;
         }
 
         .fullscreen-btn:hover {
@@ -92,24 +103,43 @@
 
         /* Fullscreen styles */
         .game-container:-webkit-full-screen {
-            width: 100vw;
-            height: 100vh;
-            max-width: none;
-            border-radius: 0;
+            width: 100vw !important;
+            height: 100vh !important;
+            max-width: none !important;
+            border-radius: 0 !important;
         }
 
         .game-container:-moz-full-screen {
-            width: 100vw;
-            height: 100vh;
-            max-width: none;
-            border-radius: 0;
+            width: 100vw !important;
+            height: 100vh !important;
+            max-width: none !important;
+            border-radius: 0 !important;
         }
 
         .game-container:fullscreen {
-            width: 100vw;
-            height: 100vh;
-            max-width: none;
-            border-radius: 0;
+            width: 100vw !important;
+            height: 100vh !important;
+            max-width: none !important;
+            border-radius: 0 !important;
+        }
+
+        /* Ensure iframe scales properly in fullscreen */
+        .game-container:-webkit-full-screen .game-iframe,
+        .game-container:-moz-full-screen .game-iframe,
+        .game-container:fullscreen .game-iframe {
+            width: 100vw !important;
+            height: 100vh !important;
+        }
+
+        /* Hide UI elements when hovering over game in fullscreen */
+        .game-container:fullscreen .game-footer {
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .game-container:fullscreen:hover .game-footer,
+        .game-container:fullscreen .game-footer:hover {
+            opacity: 1;
         }
     </style>
 </head>
@@ -215,6 +245,7 @@
             }
         });
 
+        // Parse URL parameters
         function getParams(){
           var s=location.search.substring(1), out={};
           s.split('&').forEach(function(kv){
@@ -223,15 +254,18 @@
           });
           return out;
         }
+        
         var params=getParams();
         var src=params.src||'';
         var title=params.title||'';
+        
         if(title){
           var t=document.getElementById('gameTitle');
           if(t) t.textContent=title;
         }
+        
         if(src){
-          document.getElementById('gameContent').innerHTML = '<iframe class="game-iframe" src="'+src+'"></iframe>';
+          document.getElementById('gameContent').innerHTML = '<iframe class="game-iframe" src="'+src+'" allowfullscreen></iframe>';
         } else {
           document.getElementById('gameContent').innerHTML = '<p>No game source provided</p>';
         }
